@@ -126,6 +126,9 @@ $_SESSION["messMail"] = "";
 $_SESSION["messLogin"] = "";
 $_SESSION["messmdp"]="";
 
+$_SESSION["enrok"]=1;
+
+/*
 unset($_SESSION["Nom"]);
 unset($_SESSION["Prenom"]);
 unset($_SESSION["Login"]);
@@ -141,9 +144,9 @@ if (ini_get("session.use_cookies"))
 {
     setcookie(session_name(), '', time()-1);
 }
-session_destroy();
+session_destroy();*/
 
-header('Location:index.php?authentification=1');
+header('Location:index.php');
 exit;
 
 }

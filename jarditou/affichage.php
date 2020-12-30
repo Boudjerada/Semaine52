@@ -1,6 +1,8 @@
 <?php
-$nomOk = $prenomOk = $sexeOk = $dateOk = $cpOk = $adrOk = $mailOk = $questOk = $sujetok = false;
+
 echo "<h1>Affichage des informations saisie dans le formulaire</h1><br>";
+
+$nomOk = $prenomOk = $sexeOk = $dateOk =  $cpOk = $adrOk = $mailOk =  $questOk = $villeok = $sujetok = false;
 
 // NOM
 if (!(empty($_POST["Nom"]))){
@@ -105,6 +107,7 @@ if (!(empty($_POST["question"]))){
 else{
     echo "<h4>Commentaire : Aucun";
 } 
+
 
 if ($nomOk == true and $prenomOk == true and $sexeOk == true and $dateOk == true and $cpOk == true and $adrOk == true and $mailOk == true and 
     $questOk == true and $sujetok == true)

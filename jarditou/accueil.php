@@ -17,7 +17,7 @@ $result->execute();
 $result = $db->query($requete);
 // Renvoi de l'enregistrement sous forme d'un objet
 $utilisateur = $result->fetch(PDO::FETCH_OBJ);
-$status = $utilisateur->us_status;?>
+$_SESSION["status"] = $utilisateur->us_status;?>
 
 <!DOCTYPE html>
 <html lang="fr"> <!--indique la langue dans laquelle la page web est rédigéé aux robots de référencement ou aux logiciels de synthése vocale-->
@@ -26,7 +26,7 @@ $status = $utilisateur->us_status;?>
     <!--meta permet de fourni des indications différentes du contenu de la page web -->
     <meta charset="UTF-8"><!--permet de spécifier aux navigateurs l'encodage de la page web, il s'agit là de la valeur standard qui évite les pbs d'affichages des caractères spéciaux-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0",shrink-to-fit=no>
-    <title>Document Contact</title>
+    <title>Accueil</title>
     <!--on importe Bootstrap via une URL pointant sur un CDN (un serveur externe hébergeant des fichiers) -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
@@ -52,7 +52,7 @@ $status = $utilisateur->us_status;?>
                 <h2><b>Devis gratuit</b></h2>
                 <h6>Vous pouvez bien sûr contacter pour de plus amples informations ou pour une demande d’intervention. Vous souhaitez un devis ? Nous vous le réalisons gratuitement.</h6>
             </div>
-            <div class="col-12 col-sm-4 bg-warning">[colonne de droite]</div>
+            <div class="col-12 col-sm-4 bg-warning d-flex justify-content-center"><h4>[colonne de droite]</h4></div>
         </div>
         
         </br>

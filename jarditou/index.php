@@ -1,9 +1,7 @@
 <?php session_start();?>
-<?php include 'compteurjarditou.php'; ?>
 <?php
-    if (isset ($_GET["authentification"])){
-        if ($_GET["authentification"] == 1)
-            {echo' <script> alert("Inscription réussi"); </script>';}
+    if (isset ($_SESSION["enrok"])){
+        echo' <script> alert("Inscription réussi"); </script>';
     }
 ?>
 
@@ -14,7 +12,7 @@
     <!--meta permet de fourni des indications différentes du contenu de la page web -->
     <meta charset="UTF-8"><!--permet de spécifier aux navigateurs l'encodage de la page web, il s'agit là de la valeur standard qui évite les pbs d'affichages des caractères spéciaux-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0",shrink-to-fit=no>
-    <title>Document Contact</title>
+    <title>Inscription/Connexion</title>
     <!--on importe Bootstrap via une URL pointant sur un CDN (un serveur externe hébergeant des fichiers) -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
@@ -83,7 +81,29 @@
             </div>
         </form>
     <br>
-    <?php include 'footer/footer.php'; ?> 
+    <div class="row">
+     <div class="col-12">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                        <span class="navbar-toggler-icon"></span>
+            </button>   
+            <div class="collapse navbar-collapse d-flex justify-content-center" id="collapsibleNavbar">
+                <ul class="navbar-nav ">
+                    <li class="nav-item">
+                        <a class="nav-link" href="mention légales">mention légales</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="horaires">horaires</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="plan du site">plan du site</a>
+                    </li>
+                </ul>
+            </div> 
+        </nav>
+    </div>
+</div>
+
 </div>
         
 <!--fichiers Javascript nécessaires à Bootstrap-->
@@ -113,7 +133,7 @@ echo'
      }
 </script>';
 
-/*Detruction session pour réactualisation de la page */
+/*Detruction session */
 
 $_SESSION["Nom"]="";
 $_SESSION["Prenom"]="";
@@ -129,6 +149,12 @@ $_SESSION["messlog1"]="";
 $_SESSION["messlog2"]="";
 $_SESSION["messlog3"]="";
 $_SESSION["panier"]="";
+$_SESSION["status"] ="";
+
+/*enregistrement client*/
+$_SESSION["enrok"] = "";
+
+
 
 unset($_SESSION["Nom"]);
 unset($_SESSION["Prenom"]);
@@ -144,6 +170,72 @@ unset($_SESSION["messlog1"]);
 unset($_SESSION["messlog2"]);
 unset($_SESSION["messlog3"]);
 unset($_SESSION["panier"]);
+unset($_SESSION["status"]);
+unset($_SESSION["enrok"]);
+
+
+
+
+/*en cas de modification réussi*/
+$_SESSION["champ"] = "";
+$_SESSION["messchamp"]="";
+$_SESSION["numerique"]="";
+$_SESSION["messnumeric"] = "";
+$_SESSION["ref"] = "ok";
+$_SESSION["messref"] = "";
+unset($_SESSION["champ"]);
+unset($_SESSION["messchamp"]);
+unset($_SESSION["numerique"]);
+unset($_SESSION["messnumeric"]);
+unset($_SESSION["ref"]);
+unset($_SESSION["messref"]);
+
+/*Sécurité pour formulaire contact */
+
+
+$_SESSION["Nom"]="";
+$_SESSION["Prenom"]="";
+$_SESSION["Sexe"]="";
+$_SESSION["Date"]="";
+$_SESSION["CodePostal"]="";
+$_SESSION["Adresse"]="";
+$_SESSION["Ville"]="";
+$_SESSION["Courriel"]="";
+$_SESSION["question"]="";
+$_SESSION["messNom"]="";
+$_SESSION["messPrenom"]="";
+$_SESSION["messSexe"]="";
+$_SESSION["messDate"]="";
+$_SESSION["messCp"]="";
+$_SESSION["messAdr"]="";
+$_SESSION["messVille"]="";
+$_SESSION["messMail"]="";
+$_SESSION["Sujet"]="";
+$_SESSION["messQuest"]="";
+
+$_SESSION["enrcontactok"]="";
+
+unset($_SESSION["Nom"]);
+unset($_SESSION["Prenom"]);
+unset($_SESSION["Sexe"]);
+unset($_SESSION["Date"]);
+unset($_SESSION["CodePostal"]);
+unset($_SESSION["Adresse"]);
+unset($_SESSION["Ville"]);
+unset($_SESSION["Courriel"]);
+unset($_SESSION["question"]);
+unset($_SESSION["messNom"]);
+unset($_SESSION["messPrenom"]);
+unset($_SESSION["messSexe"]);
+unset($_SESSION["messDate"]);
+unset($_SESSION["messCp"]);
+unset($_SESSION["messAdr"]);
+unset($_SESSION["messVille"]);
+unset($_SESSION["messMail"]);
+unset($_SESSION["messSujet"]);
+unset($_SESSION["messQuest"]);
+
+unset($_SESSION["enrcontactok"]);
 
 session_destroy();
 

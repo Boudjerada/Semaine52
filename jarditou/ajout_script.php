@@ -1,5 +1,6 @@
 <?php session_start();
 if  (isset ($_SESSION["Log"])){
+
 $nomcat = $_POST['cat_nom'];
 
 $bool = 1; // Pour une bonne redirection 

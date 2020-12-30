@@ -5,21 +5,32 @@ if  (isset ($_SESSION["Log"])){
 
 //récupération des informations passées en POST, nécessaires à la modification
 
+
 $bool = 1; // Pour une bonne redirection 
+$_SESSION["champ"] = "ok";
+$_SESSION["numerique"] = "ok";
+$_SESSION["ref"] = "ok";
 
+$champexisteok = $libellemok = $prixok = $stockok  = false;
 
+/*Vérification des champs qui doivent pas être null*/
 
 if ( empty($_POST['pro_ref']) || empty($_POST['pro_libelle']) || empty($_POST['pro_prix']) || empty($_POST['pro_stock']) ) {
-    header("Location: modification.php?pro_id=".$_POST['pro_id']."&erreur_ref=1");
+    $_SESSION["messchamp"] = "Vôtre modification contient des champs vides obligatoires";
     $bool = 0;
-    exit;
+    }
+else{
+    $_SESSION["messchamp"] = "";
 }
 
+/*Vérification des champs qui doivent être numérique*/
 
-else if   (!is_numeric($_POST['pro_prix']) || !is_numeric($_POST['pro_stock']) )   {
-        header("Location: modification.php?pro_id=".$_POST['pro_id']."&erreur_ref=3");
-        $bool = 0;
-        exit;
+if   (!($_POST['pro_prix'] >= 0) || !($_POST['pro_stock'] >= 0) ){
+    $_SESSION["messnumeric"] = "Le prix et le stock doivent être des valeurs Numériques positives ou nulle";
+    $bool = 0;
+    }
+else{
+    $_SESSION["messnumeric"] = "";
     }
 
 
@@ -55,15 +66,13 @@ $row = $result2->fetch(PDO::FETCH_OBJ);
 $ref=$row->pro_ref ;
 
 if (($nb_ref == 1) and ($ref != $pro_ref))  { //test pour existante de la référence diffente de la référence du produit que l'on veut modifier
-    header("Location: modification.php?pro_id=".$_POST['pro_id']."&erreur_ref=4");
+    $_SESSION["messref"] = "La Référence existe déjà";
     $bool = 0;
-    exit;
-}
-
-
-
-
-
+    }
+else{
+    $_SESSION["messref"] = "";
+    }
+  
 
 if($bool == 1){
     if (isset($_POST["pro_bloque"])){
@@ -109,10 +118,29 @@ if($bool == 1){
     $requete->closeCursor();
 
     //redirection vers la page index.php
+    $_SESSION["champ"] = "";
+    $_SESSION["messchamp"]="";
+    $_SESSION["numerique"]="";
+    $_SESSION["messnumeric"] = "";
+    $_SESSION["ref"] = "ok";
+    $_SESSION["messref"] = "";
+
+    unset($_SESSION["champ"]);
+    unset($_SESSION["messchamp"]);
+    unset($_SESSION["numerique"]);
+    unset($_SESSION["messnumeric"]);
+    unset($_SESSION["ref"]);
+    unset($_SESSION["messref"]);
+    
     header("Location: tableauadmin.php");
     exit;
    
 }
+else {
+    header("Location: modification.php?pro_id=".$_POST['pro_id']);
+    exit;
+}
+
 
 }
 

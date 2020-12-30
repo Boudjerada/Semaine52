@@ -2,9 +2,8 @@
 <?php
 if  (isset ($_SESSION["Log"])){
 
-    if (isset ($_GET["authentification"])){
-        if ($_GET["authentification"] == 1)
-            {echo' <script> alert("Inscription réussi"); </script>';}
+    if (isset ($_SESSION["enrok"])){
+        echo' <script> alert("Inscription réussi"); </script>';
     }
 ?>
 
@@ -115,6 +114,7 @@ $_SESSION["messmdp"]="";
 $_SESSION["messlog1"]="";
 $_SESSION["messlog2"]="";
 $_SESSION["messlog3"]="";
+$_SESSION["enrok"]="";
 
 unset($_SESSION["Nom"]);
 unset($_SESSION["Prenom"]);
@@ -128,6 +128,8 @@ unset($_SESSION["messmdp"]);
 unset($_SESSION["messlog1"]);
 unset($_SESSION["messlog2"]);
 unset($_SESSION["messlog3"]);
+
+unset($_SESSION["enrok"]);
 
 }
 

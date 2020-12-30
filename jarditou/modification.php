@@ -6,6 +6,7 @@ if  (isset ($_SESSION["Log"])){?>
     <head>
         <meta charset="UTF-8">
         <title>Modification d'un produit</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0",shrink-to-fit=no>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <?php
         require "connexion_bdd.php"; // Inclusion de notre bibliothèque de fonctions
@@ -45,7 +46,7 @@ if  (isset ($_SESSION["Log"])){?>
             
                     while ($row2= $result1->fetch(PDO::FETCH_OBJ))
                     {      
-                     if($row2->cat_parent != NULL){
+                    
                             echo"<option value=".$row2->cat_id."";
                 
                     // row1 : requête sur le produit                   
@@ -54,24 +55,18 @@ if  (isset ($_SESSION["Log"])){?>
                             if ($row2->cat_id == $produit->pro_cat_id) {echo" selected";}
                     
                             echo">".$row2->cat_nom."</option>\n"; //separation ligne SUR CODE SOURCE
-                        }
+                        
                     }
             ?>
                   </select>
                     
                     <label for="pro_libelle"><b>Libéllé produit :</b></label><input type="text" class="form-control" name="pro_libelle" id="pro_libelle" value="<?php echo $produit->pro_libelle ?>">
                     <label for="pro_description"><b>Description produit :</b></label><input type="text" class="form-control" name="pro_description" id="pro_description" value="<?php echo $produit->pro_description?>">
-                    <label for="pro_prix"><b>Prix :</b></label><input type="text" class="form-control" name="pro_prix" id="pro_prix" value="<?php echo $produit->pro_prix ?>">
+                    <label for="pro_prix"><b>Prix :</b></label><input type="number" class="form-control" name="pro_prix" id="pro_prix" value="<?php echo $produit->pro_prix ?>">
                     <label for="pro_stock"><b>Quantité en stock :</b></label><input type="number" class="form-control" name="pro_stock" id="pro_stock" value="<?php echo $produit->pro_stock ?>">
                     <label for="pro_couleur"><b>Couleur Produit :</b></label><input type="text" class="form-control" name="pro_couleur" id="pro_couleur" value="<?php echo $produit->pro_couleur ?>">
                     
-                    <label for="pro_photo"><b>Extension de la photo :</b></label>
-                                <select class="form-control" name="pro_photo" id="pro_photo">
-                                     <option <?php if ($produit->pro_photo == "jpg") {echo"selected";}?>>jpg</option>
-                                     <option <?php if ($produit->pro_photo == "png") {echo"selected";}?>>png</option>
-                                     <option <?php if ($produit->pro_photo == "gif") {echo"selected";}?>>gif</option>
-                                </select>
-
+                    <label for="pro_photo"><b>Extension de la photo :</b></label><input type="text" class="form-control" name="pro_photo" id="pro_photo" value="<?php echo $produit->pro_photo?>" Readonly>
                     <br>
                     <label for="pro_bloque"><b>Produit bloqué :</b></label>
                          <div class="form-check form-check-inline">
@@ -88,25 +83,12 @@ if  (isset ($_SESSION["Log"])){?>
                    
                 </div>  
             
-                <?php 
-                    if (isset ($_GET["erreur_ref"])){
-                        if (($_GET["erreur_ref"]) == 1){
-                            echo "Modification qui comporte un champs qui ne doit pas etre non null";
-                            }
-                    
-                        if (($_GET["erreur_ref"]) == 3){
-                            echo "Valeur Numérique psitive  pour le prix du produit, positive ou null pour le stock du produit";
-                        }
-                        if (($_GET["erreur_ref"]) == 4){
-                            echo "La référence du produit existe déjà";
-                        }
-                        if  (($_GET["erreur_ref"]) == 5){
-                            echo "Fichier non supporté";
-                        }
-                    }
-                ?> 
-           
-
+                <span id="alerte-champs" class="text-danger"><?php if  (isset ($_SESSION["champ"])) echo $_SESSION["messchamp"];?> </span>
+                <br>
+                <span id="alerte-num" class="text-danger"><?php if  (isset ($_SESSION["numerique"])) echo $_SESSION["messnumeric"];?> </span>
+                <br>
+                <span id="alerte-ref" class="text-danger"><?php if  (isset ($_SESSION["ref"])) echo $_SESSION["messref"];?> </span>
+                <br>
             <div class="d-flex justify-content-center" name ="actionProduit">
                 <a  class="btn btn-success" href="tableauadmin.php">Retour</a>
                 <button class="btn btn-primary ml-1" type="submit" name="submit" value="1" onclick="verif();">Enregistrer</button>
@@ -185,3 +167,21 @@ else  {?>
         </html>
         
        <?php } ?>
+
+
+<?php 
+$_SESSION["champ"] = "";
+$_SESSION["messchamp"]="";
+$_SESSION["numerique"]="";
+$_SESSION["messnumeric"] = "";
+$_SESSION["ref"] = "";
+$_SESSION["messref"] = "";
+
+unset($_SESSION["champ"]);
+unset($_SESSION["messchamp"]);
+unset($_SESSION["numerique"]);
+unset($_SESSION["messnumeric"]);
+unset($_SESSION["ref"]);
+unset($_SESSION["messref"]);
+
+?>

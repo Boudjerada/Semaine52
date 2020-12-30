@@ -5,14 +5,6 @@ if  (isset ($_SESSION["Log"])){
 require "connexion_bdd.php"; // Inclusion de notre bibliothèque de fonctions
 $db = connexionBase(); // Appel de la fonction de connexion
 
-$log = $_SESSION["Log"];
-$requete = "SELECT * FROM users where us_log=\"$log\""; //concatenantion d'une chaine de caractère
-$result = $db->prepare($requete);
-$result->execute();
-$result = $db->query($requete);
-// Renvoi de l'enregistrement sous forme d'un objet
-$utilisateur = $result->fetch(PDO::FETCH_OBJ);
-$status = $utilisateur->us_status;
 
 ?>
 
@@ -23,7 +15,7 @@ $status = $utilisateur->us_status;
     <!--meta permet de fourni des indications différentes du contenu de la page web -->
     <meta charset="UTF-8"><!--permet de spécifier aux navigateurs l'encodage de la page web, il s'agit là de la valeur standard qui évite les pbs d'affichages des caractères spéciaux-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0",shrink-to-fit=no>
-    <title>Document Contact</title>
+    <title>Panier</title>
     <!--on importe Bootstrap via une URL pointant sur un CDN (un serveur externe hébergeant des fichiers) -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
@@ -76,12 +68,16 @@ $status = $utilisateur->us_status;
     </div>
     <br>
     <br>
-    <div class="d-flex justify-content-center">
+    <div>
       <?php if ($total != 0){?>
-              <h3>Le Montant total de votre panier est de <?= $total ?> Euros</h3>
+              <h3  class="d-flex justify-content-center">Le Montant total de votre panier est de <?= round($total - (($total * 20) / 100),2) ?> Euros HT</h3> 
+              <br> 
+              <h3  class="d-flex justify-content-center">TVA : 20%</h3>
+              <br> 
+              <h3  class="d-flex justify-content-center">Le Montant total de votre panier est de <?= round($total,2) ?> Euros TTC</h3>
       <?php }
             else {?>
-              <h3>Votre panier est vide</h3>
+              <h3 class="d-flex justify-content-center">Votre panier est vide</h3>
         <?php } ?>
     </div>
     <br>

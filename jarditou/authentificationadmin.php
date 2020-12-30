@@ -113,7 +113,7 @@ $requete->execute();
 //libère la connection au serveur de BDD
 $requete->closeCursor();
 
-/*Destruction session*/
+/*Destruction variable de session*/
 
 $_SESSION["Nom"]="";
 $_SESSION["Prenom"]="";
@@ -125,6 +125,8 @@ $_SESSION["messMail"] = "";
 $_SESSION["messLogin"] = "";
 $_SESSION["messmdp"]="";
 
+$_SESSION["enrok"]=1;
+
 unset($_SESSION["Nom"]);
 unset($_SESSION["Prenom"]);
 unset($_SESSION["Login"]);
@@ -135,7 +137,7 @@ unset($_SESSION["messMail"]);
 unset($_SESSION["messLogin"]);
 unset($_SESSION["messmdp"]);
 
-header('Location:admin.php?authentification=1');
+header('Location:admin.php');
 exit;
 }
 else  {?>

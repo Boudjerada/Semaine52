@@ -42,6 +42,20 @@ if ($nb_log == 0){
 
 if ($nb_log == 1){
     if (password_verify($_POST["motdepasse3"], $mtphash)){
+        include 'compteurjarditou.php'; 
+        $dateconnexion = date("y-m-d");
+        $requete1 = $db->prepare("UPDATE users SET us_d_dercon = :us_con WHERE us_log=:us_log");
+        $requete1->bindValue(':us_con', $dateconnexion);
+        $requete1->bindValue(':us_log', $log);
+        $requete1->execute();
+
+        $_SESSION["messlog1"]="";
+        $_SESSION["messlog2"]="";
+        $_SESSION["messlog3"]="";
+        unset($_SESSION["messlog1"]);
+        unset($_SESSION["messlog2"]);
+        unset($_SESSION["messlog3"]);
+
         header('Location:accueil.php');
         exit;
     }
