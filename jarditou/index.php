@@ -1,7 +1,13 @@
 <?php session_start();?>
 <?php
     if (isset ($_SESSION["enrok"])){
-        echo' <script> alert("Inscription réussi"); </script>';
+        echo' <script> alert("Inscription réussi. Un mail vous a été envoyé."); </script>';
+    }
+    if (isset ($_SESSION["envrei"])){
+        echo' <script> alert("Un mail vous a été envoyé pour réinitialiser vôtre mot de passe."); </script>';
+    }
+    if (isset ($_SESSION["reiniok"])){
+        echo' <script> alert("Votre mot de passe a bien été changé"); </script>';
     }
 ?>
 
@@ -36,7 +42,8 @@
     <br>
     <br>
     
-    <h2 class="d-flex justify-content-center"><b>Formulaire d'inscription</b></h2>  
+    <h2 class="d-flex justify-content-center"><b>Formulaire d'inscription client</b></h2>  
+    <p>Pour vous inscrire en tant qu'administrateur afin d'avoir accés à toutes les fonctionnalités du site, veuillez me contacter : nadir.boudjerada@gmail.com</p>
         <p>Tout les champs sont obligatoires</p>
         <form name="inscription" id="inscription" method="post" action="authentification.php">
             <div class="form-group">
@@ -80,6 +87,9 @@
                 <button class="btn btn-primary" type="submit" name="submit2" id ="submit2" value="1" required>Connexion</button>
             </div>
         </form>
+    <br>
+    <a href="envoimtp.php">Mot de passe perdu<a>
+    <br>
     <br>
     <div class="row">
      <div class="col-12">
@@ -154,6 +164,10 @@ $_SESSION["status"] ="";
 /*enregistrement client*/
 $_SESSION["enrok"] = "";
 
+/*Réinitialisation mot de passe*/
+$_SESSION["envrei"]="";
+$_SESSION["reiniok"]="";
+
 
 
 unset($_SESSION["Nom"]);
@@ -171,7 +185,10 @@ unset($_SESSION["messlog2"]);
 unset($_SESSION["messlog3"]);
 unset($_SESSION["panier"]);
 unset($_SESSION["status"]);
+
 unset($_SESSION["enrok"]);
+unset($_SESSION["reiniok"]);
+unset($_SESSION["envrei"]);
 
 
 

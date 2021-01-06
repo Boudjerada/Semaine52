@@ -1,5 +1,5 @@
 <?php
-if  (isset ($_POST["Nom"])){
+if  (isset ($_POST["Login"])){
 
 
 /*Connexion base jarditou*/
@@ -11,110 +11,22 @@ session_start();
 
 /*vérification validité des champs */
 
-$_SESSION["Nom"]=$_POST["Nom"];
-$_SESSION["Prenom"]=$_POST["Prenom"];
 $_SESSION["Login"]=$_POST["Login"];
-$_SESSION["Mail"]=$_POST["Mail"];
-
-$Nomok = $Prenomok = $Loginok = $Mailok = $mtpok = false;
-
-
-if (preg_match('#[a-z]+#', $_SESSION["Nom"]))
-    {$_SESSION["messNom"] = "";
-     $Nomok = true;
-    }
-else  $_SESSION["messNom"] = "Veuillez entrer un nom valide";
-
-if (preg_match('#[a-z]+#', $_SESSION["Prenom"]))
-    {$_SESSION["messPrenom"] = "";
-     $Prenomok = true;
-    }
-else  $_SESSION["messPrenom"] = "Veuillez entrer un prénom valide";
-
-if (preg_match('#[_a-z0-9-]+(.\[_a-z0-9-]+)*@[a-z]+\.[a-z]{2,3}#', $_SESSION["Mail"]))
-    {$_SESSION["messMail"] = "";
-    $Mailok = true;
-    }
-else  $_SESSION["messMail"] = "Veuillez entrer un Mail valide";
-
-if (preg_match('#[a-zA-Z0-9]{6}[a-zA-Z0-9]*#', $_SESSION["Login"]))
-    {$_SESSION["messLogin"] = "";
-    $Loginok = true;
-    }
-else  $_SESSION["messLogin"] = "Veuillez entrer un Login d'au moins 6 caractères lettre ou chiffre sans caractère spéciaux";
-
-if (preg_match('#[a-zA-Z0-9]{8}#', $_POST["motdepasse"]))
-        {if ($_POST["motdepasse"] != $_POST["motdepasse2"])
-            $_SESSION["messmdp"] = "Les mots de passes saisies sont différent";
-        else {$_SESSION["messmdp"] ="";
-                $mtpok = true;
-            }
-        }
-else {$_SESSION["messmdp"] = "Veuillez entrer un mot de passe de 8 caractères lettre ou chiffre sans caractère spéciaux";}
-
-
-
-
-if (!($Nomok and $Prenomok and $Loginok and $Mailok and $mtpok)){
-    header('Location:index.php');
-    exit;
-}
-
-/*Vérification existance du mail */
-
-$mail=$_SESSION["Mail"];
-$requete2 = "SELECT * FROM users where us_mail=\"$mail\""; //concatenantion d'une chaine de caractère
-$result2 = $db->prepare($requete2);
-$result2->execute();
-$nb_mail=$result2->rowCount();
-$result2->closeCursor();
-
-if ($nb_mail != 0) {
-        $_SESSION["messMail"] = "Ce Mail existe déjà";
-        header('Location:index.php');
-        exit;
-}
-
-/*Vérification existance du login */
 
 $log=$_SESSION["Login"];
-$requete1 = "SELECT * FROM users where us_log=\"$log\""; //concatenantion d'une chaine de caractère
-$result1 = $db->prepare($requete1);
-$result1->execute();
-$nb_log=$result1->rowCount();
-$result1->closeCursor();
+$requete2 = "SELECT * FROM users where us_log=\"$log\""; //concatenantion d'une chaine de caractère
+$result2 = $db->prepare($requete2);
+$result2->execute();
+$nb_log=$result2->rowCount();
 
-if ($nb_log != 0) {
-        $_SESSION["messLogin"] = "Ce login existe déjà";
-        header('Location:index.php');
-        exit;
+
+if ($nb_log == 0) {
+    $_SESSION["messloge"] = "Ce login nous est inconnu";
+    header('Location:envoimtp.php');
+    exit;
 }
-
- /*Insertion nouvel utilisateur*/
-    $dateins = date("y-m-d");
-    $datecon = NULL;
-    $password_hash = password_hash($_POST["motdepasse"], PASSWORD_DEFAULT);
-    $status = 0;
-
-
-    $requete = $db->prepare("INSERT INTO users (us_nom,us_prenom,us_mail,us_log,us_mp,us_d_ins,us_d_dercon,us_status) 
-                        values(:us_nom,:us_prenom,:us_mail,:us_log,:us_mp,:us_d_ins,:us_d_dercon,:us_status)");
-    $requete->bindValue(':us_nom', $_SESSION["Nom"]);
-    $requete->bindValue(':us_prenom', $_SESSION["Prenom"]);
-    $requete->bindValue(':us_mail', $_SESSION["Mail"]);
-    $requete->bindValue(':us_log', $_SESSION["Login"]);
-    $requete->bindValue(':us_mp',  $password_hash);
-    $requete->bindValue(':us_d_ins', $dateins);
-    $requete->bindValue(':us_d_dercon', $datecon);
-    $requete->bindValue(':us_status', $status);
-
-
-$requete->execute();
-
-//libère la connection au serveur de BDD
-$requete->closeCursor();
-
-//Envoie Mail inscription
+else {
+//Envoie Mail Réinitialisation mot de passe
 
 
 $message = "<!DOCTYPE html>
@@ -143,13 +55,13 @@ body
 <div class='container'>
     <div class='row'>
         <div class='col-12'>
-          <h1 class='d-flex justify-content-center'>Confirmation Inscription</h1>
+          <h1 class='d-flex justify-content-center'>Réinitialisation mot de passe</h1>
       </div>    
     </div> 
     <br>  
     <div class='row'>
         <div class='col-12 d-flex justify-content-center'>
-          <p>Bienvenue chez Jarditou. Nous sommes heureux de vous compter parmi nos membres. Vous avez accés désormais au site Jarditou.com pour y faire vos achats</p>
+        <a href='Reinitialisationmdp.php'>Réinitialiser vôtre mot de passe<a>
       </div>    
     </div>   
 </div> 
@@ -164,45 +76,20 @@ $aHeaders = array('MIME-Version' => '1.0',
 'Reply-To' => 'Service commercial <commerciaux@jarditou.com>',
 'X-Mailer' => 'PHP/' . phpversion()
 );
-
-mail($_SESSION["Mail"], "Confirmation de votre inscription chez Jarditou", $message, $aHeaders);
-
-/*Destruction session*/
-
-$_SESSION["Nom"]="";
-$_SESSION["Prenom"]="";
-$_SESSION["Login"]="";
-$_SESSION["Mail"]="";
-$_SESSION["messNom"] = "";
-$_SESSION["messPrenom"] = "";
-$_SESSION["messMail"] = "";
-$_SESSION["messLogin"] = "";
-$_SESSION["messmdp"]="";
-
-$_SESSION["enrok"]=1;
-
-
-unset($_SESSION["Nom"]);
-unset($_SESSION["Prenom"]);
-unset($_SESSION["Login"]);
-unset($_SESSION["Mail"]);
-unset($_SESSION["messNom"]);
-unset($_SESSION["messPrenom"]);
-unset($_SESSION["messMail"]);
-unset($_SESSION["messLogin"]);
-unset($_SESSION["messmdp"]);
-
-
-/*if (ini_get("session.use_cookies")) 
-{
-    setcookie(session_name(), '', time()-1);
-}
-session_destroy();*/
-
+$row = $result2->fetch(PDO::FETCH_OBJ);
+$mail = $row->us_mail;
+mail($mail, "Réinitialisation de votre mot de passe", $message, $aHeaders);
+$result2->closeCursor();
+$_SESSION["envrei"] = "ok";
 header('Location:index.php');
 exit;
 
 }
+
+
+
+}
+
 else  {?>
     
     <!DOCTYPE html>
