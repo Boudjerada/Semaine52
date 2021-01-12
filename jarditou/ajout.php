@@ -35,17 +35,15 @@ if  (isset ($_SESSION["Log"])){?>
         <select class="form-control" name="cat_nom" id="cat_nom">
              <?php
                  while ($row = $result->fetch(PDO::FETCH_OBJ)){
-                     if ($row->cat_parent != NULL){
-                        echo"<option value=".$row->cat_id.">".$row->cat_nom."</option>";
+                     echo"<option value=".$row->cat_id.">".$row->cat_nom."</option>";
                      }
-                 }
             ?>
         </select>
         <div class="form-group">
             <label for="pro_ref"><b>Réference produit</b></label><input type="text" class="form-control" name="pro_ref" id="pro_ref">
             <label for="pro_libelle"><b>Libéllé produit</b></label><input type="text" class="form-control" name="pro_libelle" id="pro_libelle">
             <label for="pro_description"><b>Description produit</b></label><input type="text" class="form-control" name="pro_description" id="pro_description">
-            <label for="pro_prix"><b>Prix</b></label><input type="text" class="form-control" name="pro_prix" id="pro_prix">
+            <label for="pro_prix"><b>Prix</b></label><input type="number" class="form-control" name="pro_prix" id="pro_prix">
             <label for="pro_stock"><b>Quantité en stock</b></label><input type="number" class="form-control" name="pro_stock" id="pro_stock">
             <label for="pro_couleur"><b>Couleur Produit</b></label><input type="text" class="form-control" name="pro_couleur" id="pro_couleur">
             <label for="pro_photo"><b>Extension de la photo :</b></label>
@@ -62,8 +60,9 @@ if  (isset ($_SESSION["Log"])){?>
         <div class="form-check form-check-inline">
             <label class="form-check-label" for="pro_bloque"><input class="form-check-input" type="radio" name="pro_bloque" id="pro_bloque2" value=0>Non bloque</label>
         </div>
-        
         <br>
+        <br>
+        <label for="pro_d_ajout"><b>Date d'ajout :</b></label><input type="text" class="form-control" name="pro_d_ajout" id="pro_d_ajout" value='<?php echo date("yy-m-d");?>' Readonly>
         <br>
         <label for="fichier">Photo :&nbsp&nbsp</label>
         <br>
@@ -71,34 +70,44 @@ if  (isset ($_SESSION["Log"])){?>
         <input type="file" name="fichier"> 
         <br>
         <br>
-
+        <span id="alerte-champs" class="text-danger"><?php if  (isset ($_SESSION["champ"])) echo $_SESSION["messchamp"];?> </span>
+        <br>
+         <span id="alerte-num" class="text-danger"><?php if  (isset ($_SESSION["numerique"])) echo $_SESSION["messnumeric"];?> </span>
+        <br>
+        <span id="alerte-ref" class="text-danger"><?php if  (isset ($_SESSION["ref"])) echo $_SESSION["messref"];?> </span>
+        <br>
+        <span id="alerte-fich" class="text-danger"><?php if  (isset ($_SESSION["fich"])) echo $_SESSION["messfich"];?> </span>
+        <br>
         <div class="d-flex justify-content-center" name = actionProduit>
-            <button class="btn btn-primary" type="submit" name="submit" value="1" >Envoyer</button>
+            <button class="btn btn-primary" type="submit" name="submit" value="1" onclick="verif();">Envoyer</button>
             <a href="tableauadmin.php" class="btn btn-success ml-1" type="button" id="efface">Annuler</a>
         </div>
     </form>
 
     <br>
 
-<?php 
-    if (isset ($_GET["erreur_ref"])){
-        if (($_GET["erreur_ref"]) == 1){
-            echo "Insertion qui comporte un champs qui ne doit pas etre non null";
-        }
-        if  (($_GET["erreur_ref"]) == 5){
-            echo "Fichier non supporté";
-        }
-        if (($_GET["erreur_ref"]) == 3){
-            echo "Valeur Numérique positive  pour le prix du produit, positive ou null pour le stock du produit";
-        }
-        if (($_GET["erreur_ref"]) == 4){
-            echo "La référence du produit existe déjà";
-        }
-    }
-?>
-       
+
+      
 <br>
 <?php include 'footer/footer.php'; ?>
+
+
+<script>
+
+    //vérifie si on envoit ou non le formulaire à "script_modif.php"
+    function verif(){ 
+        //Rappel : confirm() -> Bouton OK et Annuler, renvoit true ou false
+        var resultat = confirm("Etes-vous certain de vouloir ajouter cet enregistrement ?");
+
+        //alert("retour :"+ resultat);
+
+        if (resultat==false){
+            alert("Vous avez annulé l'enregistrement' \nAucun nouveau produit n'a était ajouté");
+            //annule l'évènement par défaut ... SUBMIT vers "script_modif.php"
+            event.preventDefault();    
+        }
+    }
+</script>
        
        
 </div>
@@ -153,3 +162,26 @@ else  {?>
         </html>
         
        <?php } ?>
+
+<?php
+
+    $_SESSION["champ"] = "";
+     $_SESSION["messchamp"]="";
+     $_SESSION["numerique"]="";
+     $_SESSION["messnumeric"] = "";
+     $_SESSION["ref"] = "";
+     $_SESSION["messref"] = "";
+     $_SESSION["fich"] = "";
+     $_SESSION["messfich"] = "";
+ 
+ 
+     unset($_SESSION["champ"]);
+     unset($_SESSION["messchamp"]);
+     unset($_SESSION["numerique"]);
+     unset($_SESSION["messnumeric"]);
+     unset($_SESSION["ref"]);
+     unset($_SESSION["messref"]);
+     unset($_SESSION["fich"]);
+     unset($_SESSION["messfich"]);
+
+?>
